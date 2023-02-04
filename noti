@@ -1,0 +1,41 @@
+function SendNotificationByID(TokenId) {
+            console.log(TokenId);
+            var title = $("#txtTitle").val();
+            var txtBody = $("#txtBody").val();
+            var txtLink = $("#txtLink").val();
+            var txtImgUrl = $("#txtImgUrl").val();
+
+
+            var key = 'AAAAlTU0oqE:APA91bEqMDKvTGRD8WHuW3rFgEQYGDorVJbvcCDG1jvhq80BJ40Fc4AAaAgPwmwtg14xPUN6yBsS7N-IU4j3KpEr13dxkpLbz9hkz2U4tUg1J2N1e7XcEnebsk_Rq8xH2B8U6K9O_M8l';
+            //var to = 'YOUR-IID-TOKEN';
+            var to = TokenId;
+            var notification = {
+                'title': title,
+                'body': txtBody,
+                'image': "https://media.9curry.com/uploads/organization/image/1870/iasri-logo.png",
+                'icon': "https://media.9curry.com/uploads/organization/image/1870/iasri-logo.png",
+                'click_action': txtLink
+            };
+
+            fetch('https://fcm.googleapis.com/fcm/send', {
+                'method': 'POST',
+                'headers': {
+                    'Authorization': 'key=' + key,
+                    'Content-Type': 'application/json'
+                },
+                'body': JSON.stringify({
+                    'notification': notification,
+                    'to': to
+                })
+
+
+
+
+            }).then(function (response) {
+                console.log("Success");
+                console.log(response);
+            }).catch(function (error) {
+                console.log("Failed");
+                console.error(error);
+            })
+        }
