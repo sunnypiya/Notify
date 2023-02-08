@@ -1,0 +1,881 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="NewUserMaster.master.cs" Inherits="NewUserMaster" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+
+    <%-- <base href="/" />--%>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template" />
+    <meta name="author" content="Łukasz Holeczek" />
+    <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard" />
+    <title>Alumni | Welcome to Krishi Vishwavidyalaya Chhatr Alumni Network</title>
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png" />
+    <!-- Icons-->
+    <link href="node_modules/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet" />
+    <link href="node_modules/flag-icon-css/css/flag-icon.min.css" rel="stylesheet" />
+    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" />
+    
+    <!-- Main styles for this application-->
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+    <link href="vendors/pace-progress/css/pace.min.css" rel="stylesheet" />
+    <%--<!-- Global site tag (gtag.js) - Google Analytics-->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || []
+
+        function gtag() {
+            dataLayer.push(arguments)
+        }
+        gtag("js", new Date())
+        // Shared ID
+        gtag("config", "UA-118965717-3")
+        // Bootstrap ID
+        gtag("config", "UA-118965717-5")
+    </script>--%>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-4091841-25"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-4091841-25');
+    </script>
+
+    <style type="text/css">
+        @media (max-width: 767px) {
+            body {
+                padding-top: 0px !important;
+            }
+
+            .sticky-top {
+                position: initial !important;
+            }
+        }
+    </style>
+
+    <style>
+        /* width */
+        ::-webkit-scrollbar {
+            width: 2px;
+            height: 2px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+        /*Floating up button*/
+        .float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #0C9;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 1;
+        }
+
+        .my-float {
+            margin-top: 22px;
+        }
+    </style>
+
+
+    <%-- Scripts for notifcation --%>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <link rel="manifest" href="manifest.json" />
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-messaging.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDr_vIY5zMars01ITG3l1yt6Hz2zgjB79E",
+            authDomain: "ams-iasri.firebaseapp.com",
+            databaseURL: "https://ams-iasri.firebaseio.com",
+            projectId: "ams-iasri",
+            storageBucket: "ams-iasri.appspot.com",
+            messagingSenderId: "640842769057",
+            appId: "1:640842769057:web:d192a2e28fc1fd8b2386e0",
+            measurementId: "G-M54T77KDYF"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+
+        // Retrieve Firebase Messaging object.
+        const messaging = firebase.messaging();
+
+
+        //// Add the public key generated from the console here.
+        //messaging.usePublicVapidKey("BLxdfWV0YrSbsdKPn6nLPqhqDK_FdMk1uxCXK_SSWPbJ1asV7mo3LkFCMljjoQY-FnRJ7Ykcj_SvMBqYUsLI1sM");
+
+
+
+
+        function Subscribe(btnSubscribe) {
+            console.log('Requesting permission...');
+            // [START request_permission]
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+
+                    //getRegisterToken();
+                    if (isTokenSentToServer()) {
+                        console.log('Token Already sent');
+                    } else {
+                        getRegisterToken();
+                    }
+
+                    // TODO(developer): Retrieve an Instance ID token for use with FCM.
+                    // [START_EXCLUDE]
+                    // In many cases once an app has been granted notification permission,
+                    // it should update its UI reflecting this.
+                    //resetUI();
+                    // [END_EXCLUDE]
+                } else {
+                    console.log('Unable to get permission to notify.');
+                }
+            });
+            // [END request_permission]
+        }
+
+
+
+
+
+        function getRegisterToken() {
+
+            // Get Instance ID token. Initially this makes a network call, once retrieved
+            // subsequent calls to getToken will return from cache.
+            messaging.getToken().then((currentToken) => {
+
+                if (currentToken) {
+
+                    saveToken(currentToken);
+
+                    //console.log(currentToken);
+                    sendTokenToServer(currentToken);
+                    //updateUIForPushEnabled(currentToken);
+                } else {
+                    // Show permission request.
+                    console.log('No Instance ID token available. Request permission to generate one.');
+                    // Show permission UI.
+                    //updateUIForPushPermissionRequired();
+                    setTokenSentToServer(false);
+                }
+            }).catch((err) => {
+                console.log('An error occurred while retrieving token. ', err);
+                //showToken('Error retrieving Instance ID token. ', err);
+                setTokenSentToServer(false);
+            });
+
+        }
+
+        function setTokenSentToServer(sent) {
+            window.localStorage.setItem('sentToServer', sent ? '1' : '0');
+        }
+
+        function sendTokenToServer(currentToken) {
+            if (!isTokenSentToServer()) {
+                console.log('Sending token to server...');
+                // TODO(developer): Send the current token to your server.
+                setTokenSentToServer(true);
+            } else {
+                console.log('Token already sent to server so won\'t send it again ' +
+                    'unless it changes');
+            }
+
+        }
+
+        function isTokenSentToServer() {
+            return window.localStorage.getItem('sentToServer') === '1';
+        }
+
+        function saveToken(CurrentToken) {
+
+            var userid = '<%= users.User_ID%>';
+            console.log(userid);
+            $.ajax({
+                url: '../SendToken.asmx/SaveToekToDB',
+                method: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: '{ "Token":"' + CurrentToken + '", "Counter":"' + userid + '", "Platform":"' + navigator.platform + '"}',
+                success: function (data) {
+
+                    console.log('Token Saved');
+
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+
+
+
+        messaging.onMessage((payload) => {
+            console.log('Message received. foreGround ', payload);
+
+            //console.log(document.getElementsByClassName("lblNotification")[0]);
+            //document.getElementsByClassName("lblNotification")[0].innerHTML = payload.notification.title;
+            //$('.toast').toast('show');
+            var k = document.getElementById('ContentPlaceHolder1_BasicProfile_ctr_Notification_lblNotification');
+            k.innerHTML = 'Notification ' + payload.notification.title;
+            console.log(k);
+            launch_toast();
+            //document.write(payload.notification.title)
+            // ...
+            var title = payload.notification.title;
+            var options = {
+                body: payload.notification.body,
+                icon: payload.notification.icon,
+                image: payload.notification.image,
+                vibrate: [200, 100, 200],
+                data: {
+                    time: new Date(Date.now()).toString(),
+                    click_action: payload.notification.click_action
+                }
+            };
+
+
+            var myNotification = new Notification(title, options);
+
+
+        });
+
+
+
+
+
+    </script>
+
+
+     <script>
+        var prevScrollpos = window.pageYOffset;
+        window.onscroll = function () {
+            var currentScrollPos = window.pageYOffset;
+            console.log("Scrolled");
+            if (prevScrollpos > currentScrollPos) {
+                console.log("true");
+                document.getElementById("UpFloatBtn").style.visibility = 'hidden';
+
+            } else {
+                console.log("false");
+                document.getElementById("UpFloatBtn").style.visibility = 'visible';
+            }
+            prevScrollpos = currentScrollPos;
+        }
+    </script>
+
+    <%-- Ends here --%>
+
+
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body  class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+   
+    
+    <a id="UpFloatBtn" href="#HeaderSection" style="visibility:hidden" class="float page-scroll">
+            <i class="fa fa-angle-double-up my-float"></i>
+        </a>
+
+
+    <form id="form1" runat="server" defaultbutton="btnDisableEnter"> 
+        <asp:button id="btnDisableEnter" runat="server" text="" onclientclick="return false;" Style="display: none;" />
+        <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+            <%-- <span class="navbar-toggler-icon"></span>--%>
+            <img class="pull-left" src="https://img.icons8.com/cotton/64/000000/menu.png" width="50" height="50">
+            <span >KVC Alumni Network</span><br />
+            <span><center> <h6 class="text-success pull-right d-sm-none ">For Technical Queries Reach us at: <strong> support.alumni@icar.gov.in</strong></h6></center></span>
+        </button>
+
+        <header  class="app-header navbar">
+            <%--<button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <br />--%>
+            <a class="navbar-brand" href="UserProfile3.aspx">
+                <img class="navbar-brand-full"  height="30"
+                    src='<%= "../assets/logos/"+UnivLogoPath+".png" %>' />
+               <%-- <img class="navbar-brand-full" src="https://alumni.icar.gov.in/assets/images/icar.png" width="30" height="30" />
+                <p style="font-size: medium" class="mt-4"><%= cm.GetUniv_Details("",users.Univ_Collg_Id).Univ_Acronym %>-Alumni</p>--%>
+            </a>
+            <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="nav navbar-nav d-md-down-none d-lg-none d-xl-none">
+                <li class="nav-item px-3">
+                    <a class="nav-link" href="#">Dashboard</a>
+                </li>
+                <li class="nav-item px-3">
+                    <a class="nav-link" href="#" onclick="Subscribe(this)">Subscribe for latest updates</a>
+                </li>
+            </ul>
+           <center> <h6 class="text-success pull-right d-none d-lg-block d-xl-block ">For Technical Queries Reach us at: <strong> support.alumni@icar.gov.in</strong></h6></center>
+          
+            <ul class="nav navbar-nav ml-auto" style="z-index: 0!important;">
+                <li class="nav-item dropdown pr-2">
+                     <a href="#" target="_shyam"
+                        class="btn-link font-weight-bold text-warning pl-2 mt-0" style="font-size:medium; display:none">Download Reference Manual for KVC ALNET User</a>
+                </li>
+                <li class="nav-item dropdown text-secondary _bold">
+                   <span class="text-info _bold">Login : </span> <%= CommonMethods.ReturnDateWithTime(DateTime.Now.ToString()) %><br /> 
+                    (<span class="text-info _bold">Your last login : </span><%=cm.GetLastLoginDetails(users.User_ID) %>)
+                </li>
+                <li class="nav-item dropdown">
+                    <asp:ImageButton CssClass="nav-link" runat="server" ValidationGroup="Logout" 
+                        ID="btnLogOut" ImageUrl="~/img/avatars/logout.png" Width="40px" Height="40px" OnClick="lnkLogout_Click"></asp:ImageButton>
+
+                </li>
+            </ul>
+            
+        </header>
+
+         <section id="HeaderSection" >
+             </section>
+        <div class="app-body header-area"  >
+            <div class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul class="nav">
+                        <li class="nav-title">User Profile</li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="UserProfile3.aspx">
+                                <i class="nav-icon icon-home"></i>Home</a>
+                        </li>
+
+                        <li class="nav-item expand" id="editProfileSubMenuExpand">
+                            <a class="nav-link" href="#">
+                                <i class="nav-icon icon-list"></i>Profile</a>
+                        </li>
+                        <div id="editProfileSubMenu" class="collapse  ml-3">
+                            <li class="nav-item">
+                                <a class="nav-link " href="EditProfile.aspx">
+                                    <i class="nav-icon icon-list"></i>Edit Profile</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link " href="AddQualifications.aspx">
+                                    <i class="nav-icon icon-list"></i>Add Qualification</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link " href="AddWorkProfile.aspx">
+                                    <i class="nav-icon icon-list"></i>Add Work Profile</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link " href="AddSkills.aspx">
+                                    <i class="nav-icon icon-list"></i>Add Skills</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link " href="ProfileSummary.aspx">
+                                    <i class="nav-icon icon-list"></i>Profile Summary</a>
+                            </li>
+                        </div>
+
+
+
+
+
+
+
+                      <%--   <li class="nav-item" >
+                            <a class="nav-link" href="AlumniChatRoom.aspx">
+                                <i class="nav-icon icon-user"></i>Alumni Messanger</a>
+                        </li>--%>
+                        <% if (GetUserVerifiedSatus() > 0) %>
+                        <%{ %>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="Subscribe(this)">
+                                <i class="nav-icon icon-bell"></i>Subscribe for updates</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="Donate.aspx">
+                                <i class="nav-icon icon-credit-card"></i>Donate for University</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="AddTestimonial.aspx">
+                                <i class="nav-icon icon-list"></i>Add Testimonial</a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="UserDocumentsUpld.aspx">
+                                <i class="nav-icon icon-layers"></i>Documents Upload</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="MyDocs.aspx">
+                                <i class="nav-icon icon-briefcase"></i>My Documents</a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="currentevent_NAHEP.aspx">
+                                <i class="nav-icon icon-star"></i>Ongoing Events</a>
+                            <a class="nav-link" href="futureevent_NAHEP.aspx">
+                                <i class="nav-icon icon-star"></i>Upcoming Events</a>
+                            <%--<a class="nav-link" href="Passevent_NAHEP.aspx">
+                                <i class="nav-icon icon-star"></i>Past Events</a>--%>
+                        </li>
+
+
+                       <%-- <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="nav-icon icon-list"></i>News / Circulars</a>
+                        </li>--%>
+                        <li class="nav-item">
+                            <a class="nav-link" href="SwitchAlumUniv.aspx">
+                                <i class="nav-icon icon-list"></i>Switch University</a>
+                        </li> 
+                       
+                        <%} %>
+                        <li class="nav-item pt-5">
+                            <center><asp:Button runat="server" CssClass="btn btn-sm btn-danger" ValidationGroup="Logout" ID="lnkLogout"  Text="Logout"
+                                  OnClick="lnkLogout_Click">
+                            </asp:Button></center>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- <button class="sidebar-minimizer brand-minimizer" type="button"></button> -->
+            </div>
+            <main class="main">
+
+
+
+
+
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
+        </div>
+
+        <aside class="aside-menu">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab">
+                        <i class="icon-list"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#messages" role="tab">
+                        <i class="icon-speech"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#settings" role="tab">
+                        <i class="icon-settings"></i>
+                    </a>
+                </li>
+            </ul>
+            <!-- Tab panes-->
+            <div class="tab-content">
+                <div class="tab-pane active" id="timeline" role="tabpanel">
+                    <div class="list-group list-group-accent">
+                        <div class="list-group-item list-group-item-accent-secondary bg-light text-center font-weight-bold text-muted text-uppercase small">
+                            Today
+         
+                        </div>
+                        <div class="list-group-item list-group-item-accent-warning list-group-item-divider">
+                            <div class="avatar float-right">
+                                <img class="img-avatar" src="img/avatars/7.jpg" alt="admin@bootstrapmaster.com" />
+                            </div>
+                            <div>
+                                Meeting with
+             
+                                <strong>Lucas</strong>
+                            </div>
+                            <small class="text-muted mr-3">
+                                <i class="icon-calendar"></i>1 - 3pm</small>
+                            <small class="text-muted">
+                                <i class="icon-location-pin"></i>Palo Alto, CA</small>
+                        </div>
+                        <div class="list-group-item list-group-item-accent-info">
+                            <div class="avatar float-right">
+                                <img class="img-avatar" src="img/avatars/4.jpg" alt="admin@bootstrapmaster.com" />
+                            </div>
+                            <div>
+                                Skype with
+             
+                                <strong>Megan</strong>
+                            </div>
+                            <small class="text-muted mr-3">
+                                <i class="icon-calendar"></i>4 - 5pm</small>
+                            <small class="text-muted">
+                                <i class="icon-social-skype"></i>On-line</small>
+                        </div>
+                        <div class="list-group-item list-group-item-accent-secondary bg-light text-center font-weight-bold text-muted text-uppercase small">
+                            Tomorrow
+         
+                        </div>
+                        <div class="list-group-item list-group-item-accent-danger list-group-item-divider">
+                            <div>
+                                New UI Project -
+             
+                                <strong>deadline</strong>
+                            </div>
+                            <small class="text-muted mr-3">
+                                <i class="icon-calendar"></i>10 - 11pm</small>
+                            <small class="text-muted">
+                                <i class="icon-home"></i>creativeLabs HQ</small>
+                            <div class="avatars-stack mt-2">
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/2.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/3.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/4.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/5.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/6.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item list-group-item-accent-success list-group-item-divider">
+                            <div><strong>#10 Startups.Garden</strong> Meetup</div>
+                            <small class="text-muted mr-3">
+                                <i class="icon-calendar"></i>1 - 3pm</small>
+                            <small class="text-muted">
+                                <i class="icon-location-pin"></i>Palo Alto, CA</small>
+                        </div>
+                        <div class="list-group-item list-group-item-accent-primary list-group-item-divider">
+                            <div>
+                                <strong>Team meeting</strong>
+                            </div>
+                            <small class="text-muted mr-3">
+                                <i class="icon-calendar"></i>4 - 6pm</small>
+                            <small class="text-muted">
+                                <i class="icon-home"></i>creativeLabs HQ</small>
+                            <div class="avatars-stack mt-2">
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/2.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/3.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/4.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/5.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/6.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/7.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                                <div class="avatar avatar-xs">
+                                    <img class="img-avatar" src="img/avatars/8.jpg" alt="admin@bootstrapmaster.com" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane p-3" id="messages" role="tabpanel">
+                    <div class="message">
+                        <div class="py-3 pb-5 mr-3 float-left">
+                            <div class="avatar">
+                                <img class="img-avatar" src="img/avatars/7.jpg" alt="admin@bootstrapmaster.com" />
+                                <span class="avatar-status badge-success"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lukasz Holeczek</small>
+                            <small class="text-muted float-right mt-1">1:52 PM</small>
+                        </div>
+                        <div class="text-truncate font-weight-bold">
+                            Lorem ipsum dolor sit amet
+         
+                        </div>
+                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+            do eiusmod tempor incididunt...</small>
+                    </div>
+                    <hr />
+                    <div class="message">
+                        <div class="py-3 pb-5 mr-3 float-left">
+                            <div class="avatar">
+                                <img class="img-avatar" src="img/avatars/7.jpg" alt="admin@bootstrapmaster.com" />
+                                <span class="avatar-status badge-success"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lukasz Holeczek</small>
+                            <small class="text-muted float-right mt-1">1:52 PM</small>
+                        </div>
+                        <div class="text-truncate font-weight-bold">
+                            Lorem ipsum dolor sit amet
+         
+                        </div>
+                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+            do eiusmod tempor incididunt...</small>
+                    </div>
+                    <hr />
+                    <div class="message">
+                        <div class="py-3 pb-5 mr-3 float-left">
+                            <div class="avatar">
+                                <img class="img-avatar" src="img/avatars/7.jpg" alt="admin@bootstrapmaster.com" />
+                                <span class="avatar-status badge-success"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lukasz Holeczek</small>
+                            <small class="text-muted float-right mt-1">1:52 PM</small>
+                        </div>
+                        <div class="text-truncate font-weight-bold">
+                            Lorem ipsum dolor sit amet
+         
+                        </div>
+                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+            do eiusmod tempor incididunt...</small>
+                    </div>
+                    <hr />
+                    <div class="message">
+                        <div class="py-3 pb-5 mr-3 float-left">
+                            <div class="avatar">
+                                <img class="img-avatar" src="img/avatars/7.jpg" alt="admin@bootstrapmaster.com" />
+                                <span class="avatar-status badge-success"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lukasz Holeczek</small>
+                            <small class="text-muted float-right mt-1">1:52 PM</small>
+                        </div>
+                        <div class="text-truncate font-weight-bold">
+                            Lorem ipsum dolor sit amet
+         
+                        </div>
+                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+            do eiusmod tempor incididunt...</small>
+                    </div>
+                    <hr />
+                    <div class="message">
+                        <div class="py-3 pb-5 mr-3 float-left">
+                            <div class="avatar">
+                                <img class="img-avatar" src="img/avatars/7.jpg" alt="admin@bootstrapmaster.com" />
+                                <span class="avatar-status badge-success"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lukasz Holeczek</small>
+                            <small class="text-muted float-right mt-1">1:52 PM</small>
+                        </div>
+                        <div class="text-truncate font-weight-bold">
+                            Lorem ipsum dolor sit amet
+         
+                        </div>
+                        <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+            do eiusmod tempor incididunt...</small>
+                    </div>
+                </div>
+                <div class="tab-pane p-3" id="settings" role="tabpanel">
+                    <h6>Settings</h6>
+                    <div class="aside-options">
+                        <div class="clearfix mt-4">
+                            <small>
+                                <b>Option 1</b>
+                            </small>
+                            <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                                <input class="switch-input" type="checkbox" checked="" />
+                                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                            </label>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+              do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua.</small>
+                        </div>
+                    </div>
+                    <div class="aside-options">
+                        <div class="clearfix mt-3">
+                            <small>
+                                <b>Option 2</b>
+                            </small>
+                            <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                                <input class="switch-input" type="checkbox" />
+                                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                            </label>
+                        </div>
+                        <div>
+                            <small class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+              do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua.</small>
+                        </div>
+                    </div>
+                    <div class="aside-options">
+                        <div class="clearfix mt-3">
+                            <small>
+                                <b>Option 3</b>
+                            </small>
+                            <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                                <input class="switch-input" type="checkbox" />
+                                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="aside-options">
+                        <div class="clearfix mt-3">
+                            <small>
+                                <b>Option 4</b>
+                            </small>
+                            <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                                <input class="switch-input" type="checkbox" checked="" />
+                                <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <hr />
+                    <h6>System Utilization</h6>
+                    <div class="text-uppercase mb-1 mt-4">
+                        <small>
+                            <b>CPU Usage</b>
+                        </small>
+                    </div>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">348 Processes. 1/4 Cores.</small>
+                    <div class="text-uppercase mb-1 mt-2">
+                        <small>
+                            <b>Memory Usage</b>
+                        </small>
+                    </div>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">11444GB/16384MB</small>
+                    <div class="text-uppercase mb-1 mt-2">
+                        <small>
+                            <b>SSD 1 Usage</b>
+                        </small>
+                    </div>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">243GB/256GB</small>
+                    <div class="text-uppercase mb-1 mt-2">
+                        <small>
+                            <b>SSD 2 Usage</b>
+                        </small>
+                    </div>
+                    <div class="progress progress-xs">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">25GB/256GB</small>
+                </div>
+            </div>
+
+
+        </aside>
+
+
+
+
+        <%--<asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>--%>
+
+
+
+
+
+
+
+        <%--    <footer class="app-footer">
+    <div>
+      <a href="#">IARI Alumni Network</a>
+      <span>&copy; 2019 IARI.</span>
+    </div>
+    <div class="ml-auto">
+      <span>Made and maintained by</span>
+      <a href="https://iasri.res.in">IASRI</a>
+    </div>
+  </footer>--%>
+        <!-- CoreUI and necessary plugins-->
+        <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="../node_modules/popper.js/dist/umd/popper.min.js"></script>
+        <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="../node_modules/pace-progress/pace.min.js"></script>
+        <script src="../node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
+        <script src="../node_modules/@coreui/coreui/dist/js/coreui.min.js"></script>
+        <!-- Plugins and scripts required by this view-->
+        <script src="../js/colors.js"></script>
+         <!--====== Scrolling Nav js ======-->
+        <script src="../assets/js/jquery.easing.min.js"></script>
+        <script src="../assets/js/scrolling-nav.js"></script>
+         <script src="../plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
+       
+        <link href="../Css/NotificationMain.css" rel="stylesheet" />
+
+        <div id="toast2" style="height: 50px;">
+            <%--  <div id="img"><asp:Image runat="server" id="imgToste"   Width="40px" Height="30px" CssClass="rounded-circle"/></div>--%>
+            <div id="desc">
+                <asp:Label runat="server" ID="lblNotification" ForeColor="White" CssClass="toaster" Text=""></asp:Label>
+            </div>
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            function launch_toast2() {
+                var x = document.getElementById("toast2");
+
+                x.className = "show";
+                setTimeout(function () { x.className = x.className.replace("show", ""); }, 5000);
+            }
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                $('#editProfileSubMenuExpand').click(function () {
+                    $('#editProfileSubMenu').toggleClass('show');
+                })
+            })
+        </script>
+
+    </form>
+</body>
+</html>
